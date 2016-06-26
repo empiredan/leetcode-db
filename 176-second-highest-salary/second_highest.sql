@@ -11,4 +11,11 @@ insert into Employee (Id, Salary) values (3, 300);
 insert into Employee (Id, Salary) values (10, 200);
 delete from Employee where Id=2;
 
+-- ~971ms
 select min(salary.Salary) as SecondHighestSalary from (select distinct Salary from Employee order by Salary desc limit 2) salary, (select count(distinct Salary) cnt from Employee order by Salary desc limit 2) cnt where cnt.cnt > 1;
+
+-- ~786ms
+select min(Salary) as SecondHighestSalary from (select distinct Salary from Employee order by Salary desc limit 1 offset 1) salary;
+
+-- ~858ms
+select (select distinct Salary from Employee order by Salary desc limit 1 offset 1) as SecondHighestSalary;
